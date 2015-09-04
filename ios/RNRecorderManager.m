@@ -24,9 +24,7 @@ RCT_EXPORT_VIEW_PROPERTY(device, NSString);
 - (UIView *)view
 {
     // Alloc UI element
-    if (_recorderView == nil) {
-        _recorderView = [[RNRecorder alloc] initWithEventDispatcher:self.bridge.eventDispatcher];
-    }
+    _recorderView = [[RNRecorder alloc] initWithEventDispatcher:self.bridge.eventDispatcher];
     return _recorderView;
 }
 
@@ -49,16 +47,16 @@ RCT_EXPORT_METHOD(capture:(RCTResponseSenderBlock)callback)
 RCT_EXPORT_METHOD(pause:(RCTResponseSenderBlock)callback)
 {
     [_recorderView pause:^{
-        
+
         SCRecordSessionSegment* ls = [_recorderView lastSegment];
-        
+
         NSString *thumbnail = [_recorderView saveImage:ls.thumbnail];
         NSString *url = [ls.url relativeString];
         float duration = CMTimeGetSeconds(ls.duration);
-        
+
         NSDictionary *props = @{@"url": url, @"thumbnail":thumbnail, @"duration":@(duration)};
         callback(@[props]);
-    
+
     }];
 }
 
@@ -86,6 +84,17 @@ RCT_EXPORT_METHOD(save:(RCTResponseSenderBlock)callback)
             callback(@[[error localizedDescription], [NSNull null]]);
         }
     }];
+}
+
+RCT_EXPORT_METHOD(saveToCameraRoll:(RCTResponseSenderBlock)callback)
+{
+  [_recorderView saveToCameraRoll:^(NSError *error, NSURL *url) {
+    if (error == nil && url != nil) {
+      callback(@[[NSNull null], [url relativeString]]);
+    } else {
+      callback(@[[error localizedDescription], [NSNull null]]);
+    }
+  }];
 }
 
 @end

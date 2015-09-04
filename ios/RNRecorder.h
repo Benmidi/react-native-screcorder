@@ -16,6 +16,7 @@
 - (void)removeAllSegments;
 - (void)removeSegmentAtIndex:(NSInteger)index;
 - (void)save:(void(^)(NSError *error, NSURL *outputUrl))callback;
+- (void)saveToCameraRoll:(void(^)(NSError *error, NSURL *outputUrl))callback;
 - (NSString*)saveImage:(UIImage*)image;
 
 

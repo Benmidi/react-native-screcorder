@@ -61,6 +61,10 @@ var Recorder = React.createClass({
     NativeModules.RNRecorderManager.save(callback);
   },
 
+  saveToCameraRoll(callback) {
+    NativeModules.RNRecorderManager.saveToCameraRoll(callback);
+  },
+
   // Remove last segment of the session
   removeLastSegment() {
     NativeModules.RNRecorderManager.removeLastSegment();
