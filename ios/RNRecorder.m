@@ -246,14 +246,15 @@
 
    void(^completionHandler)(NSURL *url, NSError *error) = ^(NSURL *url, NSError *error) {
       if (error == nil) {
-         [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+         // [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
          UISaveVideoAtPathToSavedPhotosAlbum(url.path, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
+         callback(error, url);
       } else {
          [[[UIAlertView alloc] initWithTitle:@"Failed to save" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
       }
    };
 
-   [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+   // [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
 
    AVAsset *asset = _session.assetRepresentingSegments;
    SCAssetExportSession *assetExportSession = [[SCAssetExportSession alloc] initWithAsset:asset];
@@ -266,17 +267,16 @@
    assetExportSession.videoConfiguration.filter = [self createFilter];
 
    [assetExportSession exportAsynchronouslyWithCompletionHandler: ^{
-      callback(assetExportSession.error, assetExportSession.outputUrl);
       completionHandler(assetExportSession.outputUrl, assetExportSession.error);
    }];
 
 }
 
 - (void)video:(NSString *)videoPath didFinishSavingWithError:(NSError *)error contextInfo: (void *) contextInfo {
-   [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+   // [[UIApplication sharedApplication] endIgnoringInteractionEvents];
 
    if (error == nil) {
-      [[[UIAlertView alloc] initWithTitle:@"Saved to camera roll" message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+      // [[[UIAlertView alloc] initWithTitle:@"Saved to camera roll" message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
    } else {
       [[[UIAlertView alloc] initWithTitle:@"Failed to save" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
    }
