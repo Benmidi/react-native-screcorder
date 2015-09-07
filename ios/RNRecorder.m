@@ -242,7 +242,7 @@
    }];
 }
 
-- (void)saveToCameraRoll:(void(^)(NSError *error, NSURL *outputUrl))callback {
+- (void)saveToCameraRoll:(NSString *)text callback: (void(^)(NSError *error, NSURL *outputUrl))callback {
 
    void(^completionHandler)(NSURL *url, NSError *error) = ^(NSURL *url, NSError *error) {
       if (error == nil) {
@@ -263,6 +263,22 @@
    assetExportSession.videoConfiguration.preset = _videoQuality;
    assetExportSession.audioConfiguration.preset = _audioQuality;
 
+   // Get some image from somewhere
+   UIImage *someImage = [UIImage imageNamed:@"targetImage"];
+
+   // Font of text
+   UIFont *font = [UIFont fontWithName:@"HelveticaNeue" size:20.0];
+
+   // Location of text
+   CGRect textFrame = CGRectMake(0, 0, 720, 720);
+
+   // Get result image with text
+   UIImage *someImageWithText = [self image:someImage withText:text ofFont:font inFrame:textFrame];
+
+
+   assetExportSession.videoConfiguration.watermarkImage = someImageWithText;
+   assetExportSession.videoConfiguration.watermarkFrame = CGRectMake(0, 0, 720, 720);
+
    // Apply filters
    assetExportSession.videoConfiguration.filter = [self createFilter];
 
@@ -282,6 +298,18 @@
    }
 }
 
+- (UIImage *)image:(UIImage *)image withText:(NSString *)text ofFont:(UIFont *)font inFrame:(CGRect)textFrame {
+   UIGraphicsBeginImageContextWithOptions(image.size, NO, 0.0f);
+
+   NSDictionary *textAttributes = @{ NSFontAttributeName: font };
+
+   [text drawInRect:textFrame withAttributes:textAttributes];
+
+   UIImage* imageWithText = UIGraphicsGetImageFromCurrentImageContext();
+   UIGraphicsEndImageContext();
+
+   return imageWithText;
+}
 
 #pragma mark - SCRecorder events
 

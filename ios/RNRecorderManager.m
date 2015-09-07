@@ -86,9 +86,9 @@ RCT_EXPORT_METHOD(save:(RCTResponseSenderBlock)callback)
     }];
 }
 
-RCT_EXPORT_METHOD(saveToCameraRoll:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_METHOD(saveToCameraRoll:(NSString *)text callback:(RCTResponseSenderBlock)callback)
 {
-  [_recorderView saveToCameraRoll:^(NSError *error, NSURL *url) {
+  [_recorderView saveToCameraRoll:(NSString *)text callback:^(NSError *error, NSURL *url) {
     if (error == nil && url != nil) {
       callback(@[[NSNull null], [url relativeString]]);
     } else {
