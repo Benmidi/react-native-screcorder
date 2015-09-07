@@ -301,7 +301,10 @@
 - (UIImage *)image:(UIImage *)image withText:(NSString *)text ofFont:(UIFont *)font inFrame:(CGRect)textFrame {
    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0.0f);
 
-   NSDictionary *textAttributes = @{ NSFontAttributeName: font };
+   NSDictionary *textAttributes = @{
+                                    NSFontAttributeName: font,
+                                    NSForegroundColorAttributeName: [UIColor whiteColor]
+                                    };
 
    [text drawInRect:textFrame withAttributes:textAttributes];
 
